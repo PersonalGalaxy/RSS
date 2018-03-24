@@ -16,6 +16,7 @@ use Innmind\EventBus\{
     ContainsRecordedEventsInterface,
     EventRecorder,
 };
+use Innmind\TimeContinuum\PointInTimeInterface;
 
 final class Article implements ContainsRecordedEventsInterface
 {
@@ -26,6 +27,7 @@ final class Article implements ContainsRecordedEventsInterface
     private $link;
     private $description;
     private $title;
+    private $publicationDate;
     private $read = false;
 
     private function __construct(
@@ -33,13 +35,15 @@ final class Article implements ContainsRecordedEventsInterface
         Author $author,
         UrlInterface $link,
         Description $description,
-        Title $title
+        Title $title,
+        PointInTimeInterface $publicationDate
     ) {
         $this->identity = $identity;
         $this->author = $author;
         $this->link = $link;
         $this->description = $description;
         $this->title = $title;
+        $this->publicationDate = $publicationDate;
     }
 
     public static function fetch(
@@ -47,10 +51,11 @@ final class Article implements ContainsRecordedEventsInterface
         Author $author,
         UrlInterface $link,
         Description $description,
-        Title $title
+        Title $title,
+        PointInTimeInterface $publicationDate
     ): self {
-        $self = new self($identity, $author, $link, $description, $title);
-        $self->record(new ArticleWasFetched($identity, $author, $link, $description, $title));
+        $self = new self($identity, $author, $link, $description, $title, $publicationDate);
+        $self->record(new ArticleWasFetched($identity, $author, $link, $description, $title, $publicationDate));
 
         return $self;
     }
@@ -78,6 +83,11 @@ final class Article implements ContainsRecordedEventsInterface
     public function title(): Title
     {
         return $this->title;
+    }
+
+    public function publicationDate(): PointInTimeInterface
+    {
+        return $this->publicationDate;
     }
 
     public function markAsRead(): void

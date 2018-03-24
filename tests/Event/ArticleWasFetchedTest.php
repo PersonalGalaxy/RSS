@@ -11,6 +11,7 @@ use PersonalGalaxy\RSS\{
     Entity\Article\Title,
 };
 use Innmind\Url\UrlInterface;
+use Innmind\TimeContinuum\PointInTimeInterface;
 use PHPUnit\Framework\TestCase;
 
 class ArticleWasFetchedTest extends TestCase
@@ -22,7 +23,8 @@ class ArticleWasFetchedTest extends TestCase
             $author = new Author('foo'),
             $link = $this->createMock(UrlInterface::class),
             $description = new Description('bar'),
-            $title = new Title('baz')
+            $title = new Title('baz'),
+            $publicationDate = $this->createMock(PointInTimeInterface::class)
         );
 
         $this->assertSame($identity, $event->identity());
@@ -30,5 +32,6 @@ class ArticleWasFetchedTest extends TestCase
         $this->assertSame($link, $event->link());
         $this->assertSame($description, $event->description());
         $this->assertSame($title, $event->title());
+        $this->assertSame($publicationDate, $event->publicationDate());
     }
 }

@@ -10,6 +10,7 @@ use PersonalGalaxy\RSS\Entity\Article\{
     Title,
 };
 use Innmind\Url\UrlInterface;
+use Innmind\TimeContinuum\PointInTimeInterface;
 
 final class ArticleWasFetched
 {
@@ -18,19 +19,22 @@ final class ArticleWasFetched
     private $link;
     private $description;
     private $title;
+    private $publicationDate;
 
     public function __construct(
         Identity $identity,
         Author $author,
         UrlInterface $link,
         Description $description,
-        Title $title
+        Title $title,
+        PointInTimeInterface $publicationDate
     ) {
         $this->identity = $identity;
         $this->author = $author;
         $this->link = $link;
         $this->description = $description;
         $this->title = $title;
+        $this->publicationDate = $publicationDate;
     }
 
     public function identity(): Identity
@@ -56,5 +60,10 @@ final class ArticleWasFetched
     public function title(): Title
     {
         return $this->title;
+    }
+
+    public function publicationDate(): PointInTimeInterface
+    {
+        return $this->publicationDate;
     }
 }

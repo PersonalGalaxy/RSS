@@ -14,6 +14,7 @@ use PersonalGalaxy\RSS\{
 };
 use Innmind\Url\UrlInterface;
 use Innmind\EventBus\ContainsRecordedEventsInterface;
+use Innmind\TimeContinuum\PointInTimeInterface;
 use PHPUnit\Framework\TestCase;
 
 class ArticleTest extends TestCase
@@ -25,7 +26,8 @@ class ArticleTest extends TestCase
             $author = new Author('foo'),
             $link = $this->createMock(UrlInterface::class),
             $description = new Description('bar'),
-            $title = new Title('baz')
+            $title = new Title('baz'),
+            $publicationDate = $this->createMock(PointInTimeInterface::class)
         );
 
         $this->assertInstanceOf(Article::class, $article);
@@ -35,6 +37,7 @@ class ArticleTest extends TestCase
         $this->assertSame($link, $article->link());
         $this->assertSame($description, $article->description());
         $this->assertSame($title, $article->title());
+        $this->assertSame($publicationDate, $article->publicationDate());
         $this->assertCount(1, $article->recordedEvents());
         $event = $article->recordedEvents()->current();
         $this->assertInstanceOf(ArticleWasFetched::class, $event);
@@ -43,6 +46,7 @@ class ArticleTest extends TestCase
         $this->assertSame($link, $event->link());
         $this->assertSame($description, $event->description());
         $this->assertSame($title, $event->title());
+        $this->assertSame($publicationDate, $event->publicationDate());
     }
 
     public function testMarkAsRead()
@@ -52,7 +56,8 @@ class ArticleTest extends TestCase
             new Author('foo'),
             $this->createMock(UrlInterface::class),
             new Description('bar'),
-            new Title('baz')
+            new Title('baz'),
+            $this->createMock(PointInTimeInterface::class)
         );
 
         $this->assertFalse($article->read());
