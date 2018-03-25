@@ -121,5 +121,12 @@ class FetchSubscriptionHandlerTest extends TestCase
             ->with($third);
 
         $this->assertNull($handle($command));
+        $this->assertSame($identity, $first->subscription());
+        $this->assertSame($identity, $third->subscription());
+
+        $this->expectException(\typeError::class);
+
+        // not bound to subscription as we don't want to persist this article
+        $second->subscription();
     }
 }

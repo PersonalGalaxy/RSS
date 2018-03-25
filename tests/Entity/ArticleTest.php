@@ -8,8 +8,10 @@ use PersonalGalaxy\RSS\{
     Entity\Article\Author,
     Entity\Article\Description,
     Entity\Article\Title,
+    Entity\Subscription\Identity,
     Event\ArticleWasFetched,
     Event\ArticleWasMarkedAsRead,
+    Exception\LogicException,
 };
 use Innmind\Url\UrlInterface;
 use Innmind\EventBus\ContainsRecordedEventsInterface;
@@ -63,5 +65,27 @@ class ArticleTest extends TestCase
         $event = $article->recordedEvents()->last();
         $this->assertInstanceOf(ArticleWasMarkedAsRead::class, $event);
         $this->assertSame($identity, $event->link());
+    }
+
+    public function testBindTo()
+    {
+        $article = Article::fetch(
+            $this->createMock(UrlInterface::class),
+            new Author('foo'),
+            new Description('bar'),
+            new Title('baz'),
+            $this->createMock(PointInTimeInterface::class)
+        );
+        $subscription = $this->createMock(Identity::class);
+
+        $this->assertNull($article->bindTo($subscription));
+        // no event recorded for the binding as it's not supposed to happen
+        // elsewhere than in the fetch command
+        $this->assertCount(1, $article->recordedEvents());
+
+        $this->expectException(LogicException::class);
+
+        // rebinding the article is not allowed
+        $article->bindTo($subscription);
     }
 }

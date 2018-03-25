@@ -47,7 +47,8 @@ final class FetchSubscriptionHandler
             ->filter(function(Article $article): bool {
                 return !$this->articles->has($article->link());
             })
-            ->foreach(function(Article $article): void {
+            ->foreach(function(Article $article) use ($subscription): void {
+                $article->bindTo($subscription->identity());
                 $this->articles->add($article);
             });
     }

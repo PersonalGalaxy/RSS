@@ -6,10 +6,11 @@ namespace PersonalGalaxy\RSS\Entity;
 use PersonalGalaxy\RSS\{
     Event\ArticleWasFetched,
     Event\ArticleWasMarkedAsRead,
-    Entity\Article\Identity,
     Entity\Article\Author,
     Entity\Article\Description,
     Entity\Article\Title,
+    Entity\Subscription\Identity,
+    Exception\LogicException,
 };
 use Innmind\Url\UrlInterface;
 use Innmind\EventBus\{
@@ -27,6 +28,7 @@ final class Article implements ContainsRecordedEventsInterface
     private $description;
     private $title;
     private $publicationDate;
+    private $subscription;
     private $read = false;
 
     private function __construct(
@@ -92,5 +94,19 @@ final class Article implements ContainsRecordedEventsInterface
     public function read(): bool
     {
         return $this->read;
+    }
+
+    public function bindTo(Identity $subscription): void
+    {
+        if ($this->subscription) {
+            throw new LogicException;
+        }
+
+        $this->subscription = $subscription;
+    }
+
+    public function subscription(): Identity
+    {
+        return $this->subscription;
     }
 }
