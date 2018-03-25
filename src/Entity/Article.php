@@ -22,23 +22,20 @@ final class Article implements ContainsRecordedEventsInterface
 {
     use EventRecorder;
 
-    private $identity;
-    private $author;
     private $link;
+    private $author;
     private $description;
     private $title;
     private $publicationDate;
     private $read = false;
 
     private function __construct(
-        Identity $identity,
-        Author $author,
         UrlInterface $link,
+        Author $author,
         Description $description,
         Title $title,
         PointInTimeInterface $publicationDate
     ) {
-        $this->identity = $identity;
         $this->author = $author;
         $this->link = $link;
         $this->description = $description;
@@ -47,22 +44,16 @@ final class Article implements ContainsRecordedEventsInterface
     }
 
     public static function fetch(
-        Identity $identity,
-        Author $author,
         UrlInterface $link,
+        Author $author,
         Description $description,
         Title $title,
         PointInTimeInterface $publicationDate
     ): self {
-        $self = new self($identity, $author, $link, $description, $title, $publicationDate);
-        $self->record(new ArticleWasFetched($identity, $author, $link, $description, $title, $publicationDate));
+        $self = new self($link, $author, $description, $title, $publicationDate);
+        $self->record(new ArticleWasFetched($link, $author, $description, $title, $publicationDate));
 
         return $self;
-    }
-
-    public function identity(): Identity
-    {
-        return $this->identity;
     }
 
     public function author(): Author
@@ -93,7 +84,7 @@ final class Article implements ContainsRecordedEventsInterface
     public function markAsRead(): void
     {
         $this->read = true;
-        $this->record(new ArticleWasMarkedAsRead($this->identity));
+        $this->record(new ArticleWasMarkedAsRead($this->link));
     }
 
     public function read(): bool

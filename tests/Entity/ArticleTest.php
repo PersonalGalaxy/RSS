@@ -5,7 +5,6 @@ namespace Tests\PersonalGalaxy\RSS\Entity;
 
 use PersonalGalaxy\RSS\{
     Entity\Article,
-    Entity\Article\Identity,
     Entity\Article\Author,
     Entity\Article\Description,
     Entity\Article\Title,
@@ -22,9 +21,8 @@ class ArticleTest extends TestCase
     public function testFetch()
     {
         $article = Article::fetch(
-            $identity = $this->createMock(Identity::class),
-            $author = new Author('foo'),
             $link = $this->createMock(UrlInterface::class),
+            $author = new Author('foo'),
             $description = new Description('bar'),
             $title = new Title('baz'),
             $publicationDate = $this->createMock(PointInTimeInterface::class)
@@ -32,7 +30,6 @@ class ArticleTest extends TestCase
 
         $this->assertInstanceOf(Article::class, $article);
         $this->assertInstanceOf(ContainsRecordedEventsInterface::class, $article);
-        $this->assertSame($identity, $article->identity());
         $this->assertSame($author, $article->author());
         $this->assertSame($link, $article->link());
         $this->assertSame($description, $article->description());
@@ -41,7 +38,6 @@ class ArticleTest extends TestCase
         $this->assertCount(1, $article->recordedEvents());
         $event = $article->recordedEvents()->current();
         $this->assertInstanceOf(ArticleWasFetched::class, $event);
-        $this->assertSame($identity, $event->identity());
         $this->assertSame($author, $event->author());
         $this->assertSame($link, $event->link());
         $this->assertSame($description, $event->description());
@@ -52,9 +48,8 @@ class ArticleTest extends TestCase
     public function testMarkAsRead()
     {
         $article = Article::fetch(
-            $identity = $this->createMock(Identity::class),
+            $identity = $this->createMock(UrlInterface::class),
             new Author('foo'),
-            $this->createMock(UrlInterface::class),
             new Description('bar'),
             new Title('baz'),
             $this->createMock(PointInTimeInterface::class)
@@ -66,6 +61,6 @@ class ArticleTest extends TestCase
         $this->assertCount(2, $article->recordedEvents());
         $event = $article->recordedEvents()->last();
         $this->assertInstanceOf(ArticleWasMarkedAsRead::class, $event);
-        $this->assertSame($identity, $event->identity());
+        $this->assertSame($identity, $event->link());
     }
 }

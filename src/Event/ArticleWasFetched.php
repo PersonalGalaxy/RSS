@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace PersonalGalaxy\RSS\Event;
 
 use PersonalGalaxy\RSS\Entity\Article\{
-    Identity,
     Author,
     Description,
     Title,
@@ -14,32 +13,24 @@ use Innmind\TimeContinuum\PointInTimeInterface;
 
 final class ArticleWasFetched
 {
-    private $identity;
-    private $author;
     private $link;
+    private $author;
     private $description;
     private $title;
     private $publicationDate;
 
     public function __construct(
-        Identity $identity,
-        Author $author,
         UrlInterface $link,
+        Author $author,
         Description $description,
         Title $title,
         PointInTimeInterface $publicationDate
     ) {
-        $this->identity = $identity;
-        $this->author = $author;
         $this->link = $link;
+        $this->author = $author;
         $this->description = $description;
         $this->title = $title;
         $this->publicationDate = $publicationDate;
-    }
-
-    public function identity(): Identity
-    {
-        return $this->identity;
     }
 
     public function author(): Author

@@ -3,19 +3,19 @@ declare(strict_types = 1);
 
 namespace PersonalGalaxy\RSS\Event;
 
-use PersonalGalaxy\RSS\Entity\Article\Identity;
+use Innmind\Url\UrlInterface;
 
 final class ArticleWasMarkedAsRead
 {
-    private $identity;
+    private $link;
 
-    public function __construct(Identity $identity)
+    public function __construct(UrlInterface $link)
     {
-        $this->identity = $identity;
+        $this->link = $link;
     }
 
-    public function identity(): Identity
+    public function link(): UrlInterface
     {
-        return $this->identity;
+        return $this->link;
     }
 }

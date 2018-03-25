@@ -5,7 +5,6 @@ namespace Tests\PersonalGalaxy\RSS\Event;
 
 use PersonalGalaxy\RSS\{
     Event\ArticleWasFetched,
-    Entity\Article\Identity,
     Entity\Article\Author,
     Entity\Article\Description,
     Entity\Article\Title,
@@ -19,15 +18,13 @@ class ArticleWasFetchedTest extends TestCase
     public function testInterface()
     {
         $event = new ArticleWasFetched(
-            $identity = $this->createMock(Identity::class),
-            $author = new Author('foo'),
             $link = $this->createMock(UrlInterface::class),
+            $author = new Author('foo'),
             $description = new Description('bar'),
             $title = new Title('baz'),
             $publicationDate = $this->createMock(PointInTimeInterface::class)
         );
 
-        $this->assertSame($identity, $event->identity());
         $this->assertSame($author, $event->author());
         $this->assertSame($link, $event->link());
         $this->assertSame($description, $event->description());
