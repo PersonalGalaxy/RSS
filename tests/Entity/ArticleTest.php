@@ -57,6 +57,7 @@ class ArticleTest extends TestCase
 
         $this->assertFalse($article->read());
         $this->assertNull($article->markAsRead());
+        $this->assertNull($article->markAsRead()); // verify that calling many times generate only one event
         $this->assertTrue($article->read());
         $this->assertCount(2, $article->recordedEvents());
         $event = $article->recordedEvents()->last();

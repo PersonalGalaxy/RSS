@@ -83,8 +83,10 @@ final class Article implements ContainsRecordedEventsInterface
 
     public function markAsRead(): void
     {
-        $this->read = true;
-        $this->record(new ArticleWasMarkedAsRead($this->link));
+        if (!$this->read) {
+            $this->read = true;
+            $this->record(new ArticleWasMarkedAsRead($this->link));
+        }
     }
 
     public function read(): bool
