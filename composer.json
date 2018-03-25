@@ -1,0 +1,44 @@
+{
+    "name": "personal-galaxy/rss",
+    "type": "library",
+    "description": "RSS Reader",
+    "keywords": ["rss", "reader"],
+    "homepage": "http://github.com/PersonalGalaxy/RSS",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Baptiste Langlade",
+            "email": "langlade.baptiste@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "http://github.com/PersonalGalaxy/RSS/issues"
+    },
+    "require": {
+        "php": "~7.2",
+        "innmind/event-bus": "^2.1",
+        "innmind/url": "^2.0",
+        "innmind/immutable": "^2.8",
+        "innmind/specification": "^1.0",
+        "innmind/time-continuum": "^1.1",
+        "innmind/crawler": "^4.1"
+    },
+    "autoload": {
+        "psr-4": {
+            "PersonalGalaxy\\RSS\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\PersonalGalaxy\\RSS\\": "tests/",
+            "Fixture\\PersonalGalaxy\\RSS\\": "fixtures/"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "~6.0",
+        "giorgiosironi/eris": "^0.9.0"
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit --colors=always"
+    }
+}
