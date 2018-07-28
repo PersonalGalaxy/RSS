@@ -6,6 +6,7 @@ namespace Tests\PersonalGalaxy\RSS\Parser;
 use PersonalGalaxy\RSS\{
     Parser\RSS,
     Entity\Article,
+    UrlFactory,
 };
 use Innmind\Crawler\{
     Parser,
@@ -46,7 +47,8 @@ class RSSTest extends TestCase
             Parser::class,
             new RSS(
                 $this->createMock(ReaderInterface::class),
-                $this->createMock(TimeContinuumInterface::class)
+                $this->createMock(TimeContinuumInterface::class),
+                $this->createMock(UrlFactory::class)
             )
         );
         $this->assertSame('articles', RSS::key());
@@ -56,7 +58,8 @@ class RSSTest extends TestCase
     {
         $parser = new RSS(
             $this->createMock(ReaderInterface::class),
-            $this->createMock(TimeContinuumInterface::class)
+            $this->createMock(TimeContinuumInterface::class),
+            new UrlFactory\UrlFactory
         );
 
         $attributes = $parser->parse(
@@ -72,7 +75,8 @@ class RSSTest extends TestCase
     {
         $parser = new RSS(
             $this->createMock(ReaderInterface::class),
-            $this->createMock(TimeContinuumInterface::class)
+            $this->createMock(TimeContinuumInterface::class),
+            new UrlFactory\UrlFactory
         );
 
         $response = $this->createMock(Response::class);
@@ -102,7 +106,8 @@ class RSSTest extends TestCase
                     NodeTranslators::defaults()
                 )
             ),
-            new Earth(new UTC)
+            new Earth(new UTC),
+            new UrlFactory\UrlFactory
         );
 
         $response = $this->createMock(Response::class);

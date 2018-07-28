@@ -3,11 +3,12 @@ declare(strict_types = 1);
 
 namespace PersonalGalaxy\RSS\Parser;
 
-use PersonalGalaxy\RSS\Entity\{
-    Article,
-    Article\Author,
-    Article\Description,
-    Article\Title,
+use PersonalGalaxy\RSS\{
+    Entity\Article,
+    Entity\Article\Author,
+    Entity\Article\Description,
+    Entity\Article\Title,
+    UrlFactory,
 };
 use Innmind\Url\Url;
 use Innmind\Crawler\{
@@ -36,13 +37,16 @@ final class Atom implements Parser
 {
     private $reader;
     private $clock;
+    private $make;
 
     public function __construct(
         ReaderInterface $reader,
-        TimeContinuumInterface $clock
+        TimeContinuumInterface $clock,
+        UrlFactory $make
     ) {
         $this->reader = $reader;
         $this->clock = $clock;
+        $this->make = $make;
     }
 
     public function parse(
@@ -116,7 +120,7 @@ final class Atom implements Parser
                         ->content();
 
                     return $articles->add(Article::fetch(
-                        Url::fromString(trim($link)),
+                        ($this->make)(trim($link)),
                         new Author(trim($author)),
                         new Description(trim($description)),
                         new Title(trim($title)),
